@@ -1,0 +1,2 @@
+LOGIN_REDIRECT='index'
+LOGOUT_REDIRECT='index'

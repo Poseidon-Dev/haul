@@ -10,7 +10,8 @@ from flask_login import (
 )
 
 from models import User
-from database import db_session
+from database import db
+import config
 
 # Configuration
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
@@ -30,7 +31,7 @@ def get_google_provider_cfg():
 # Flask-Login helper to retrieve a user from our db
 @login_manager.user_loader
 def load_user(user_id):
-    q = db_session.query(User)
+    q = db.query(User)
     return q.filter(User.id==user_id).one()
 
 def login():
@@ -77,23 +78,27 @@ def callback():
     userinfo_response = requests.get(uri, headers=headers, data=body)
 
     if userinfo_response.json().get("email_verified"):
-        unique_id = userinfo_response.json()["sub"]
-        users_email = userinfo_response.json()["email"]
+        _id = userinfo_response.json()["sub"]
+        email = userinfo_response.json()["email"]
         picture = userinfo_response.json()["picture"]
-        users_name = userinfo_response.json()["given_name"]
-        user_domain = userinfo_response.json()["hd"]
+        first_name = userinfo_response.json()["given_name"]
+        last_name = userinfo_response.json()["family_name"]
+        domain = userinfo_response.json()["hd"]
         is_active = userinfo_response.json()["email_verified"]
     else:
         return "User email not available or not verified by Google.", 400
 
-    u = User(unique_id, users_name, users_email, picture, user_domain, is_active)
-    db_session.add(u)
-    db_session.commit()
+    q = db.query(User)
+    try:
+        u = q.filter(User.id==_id).one()
+    except:
+        u = User(_id, first_name, last_name, email, picture, domain, is_active)
+        db.add(u)
+        db.commit()
 
     login_user(u)
-
-    return redirect(url_for("index"))
+    return redirect(url_for(config.LOGIN_REDIRECT))
 
 def logout():
     logout_user()
-    return redirect(url_for("index"))
+    return redirect(url_for(config.LOGOUT_REDIRECT))
