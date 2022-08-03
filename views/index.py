@@ -5,7 +5,8 @@ from flask_login import (
 from flask_restful import Api, Resource
 
 from database import db
-from models import Equipment, equipments_schema, Profile, User
+from models import Equipment, Profile, User
+from models import _equips, _profile, _user
 
 def dummy_equip():
     e = Equipment('12345', 'Test Equipment', '12321', 'Truck', '2019', 4, 11, 110, '300000', '32', division_id=0)
@@ -38,15 +39,14 @@ def db_test():
     u = User.query.filter(User.id=='104254980911636950356').one()
     p = Profile.query.filter(Profile.user_id==u.id).one()
     e = Equipment.query.filter(Equipment.division_id==p.division_id)
-    e = equipments_schema.dump(e)
     resp = {
-        'user': u.as_dict(),
-        'profile': p.as_dict(),
-        'equip': e,
+        'user': _user.dump(u),
+        'profile': _profile.dump(p),
+        'equip': _equips.dump(e),
     }
     return resp
 
 class EquipmentListResource(Resource):
     def get(self):
         equips = Equipment.query.all()
-        return equipments_schema.dump(equips)
+        return _equips.dump(equips)

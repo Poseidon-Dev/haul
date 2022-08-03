@@ -41,3 +41,9 @@ class User(Base, BaseModel):
     def __repr__(self):
         return f'<User {self.name}'
     
+class UserSchema(Schema):
+    class Meta:
+        fields = ('uuid', 'is_active', 'domain')
+        model = User
+
+_user = UserSchema()

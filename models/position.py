@@ -1,4 +1,5 @@
 from sqlalchemy import Column, String, Integer, Boolean
+from marshmallow import Schema
 from database import Base
 import config
 
@@ -16,3 +17,10 @@ class Position(Base):
 
     def get_position(self, id):
         return config.POSITIONS.get(id, 'Unknown')
+
+class PositionSchema(Schema):
+    class meta:
+        fields = ('position')
+        model = Position
+
+_positions = PositionSchema(many=True)

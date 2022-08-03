@@ -62,4 +62,4 @@ class EquipmentSchema(Schema):
         fields = ('equipment_id', 'description', 'division', 'division_id')
         model = Equipment
 
-equipments_schema = EquipmentSchema(many=True)
+_equips = EquipmentSchema(many=True)

@@ -1,4 +1,5 @@
 from sqlalchemy import Column, String, Integer, Boolean
+from marshmallow import Schema
 from database import Base
 from models.base import BaseModel
 from models.division import Division
@@ -29,5 +30,12 @@ class Profile(Base, BaseModel):
         return self.get_related_obj(Division, Division.id, self.division_id).division
 
     @property
-    def get_position(self):
+    def position(self):
         return self.get_related_obj(Position, Position.id, self.position_id).position
+
+class ProfileSchema(Schema):
+    class Meta:
+        fields = ('user.name', 'division', 'position', 'user.email', 'user.profile_pic')
+        model = Profile
+
+_profile = ProfileSchema()

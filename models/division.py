@@ -1,4 +1,5 @@
 from sqlalchemy import Column, String, Integer, Boolean
+from marshmallow import Schema
 from database import Base
 import config
 
@@ -14,3 +15,10 @@ class Division(Base):
 
     def get_division(self, id):
         return config.DIVISIONS.get(id, 'Unknown')
+
+class DivisionSchema(Schema):
+    class meta:
+        fields = ('division')
+        model = Division
+
+_divisions = DivisionSchema(many=True)
