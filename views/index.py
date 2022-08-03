@@ -5,7 +5,7 @@ from flask_login import (
 from flask_restful import Api, Resource
 
 from database import db
-from models import Equipment, User, equipments_schema, Profile
+from models import Equipment, equipments_schema, Profile, User
 
 def dummy_equip():
     e = Equipment('12345', 'Test Equipment', '12321', 'Truck', '2019', 4, 11, 110, '300000', '32', division_id=0)
@@ -34,7 +34,7 @@ def index():
         return '<a class="button" href="/login">Google Login</a>'
 
 def db_test():
-    dummy_equip()
+    # dummy_equip()
     u = User.query.filter(User.id=='104254980911636950356').one()
     p = Profile.query.filter(Profile.user_id==u.id).one()
     e = Equipment.query.filter(Equipment.division_id==p.division_id)
