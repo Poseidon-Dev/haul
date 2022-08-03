@@ -39,3 +39,4 @@ class ProfileSchema(Schema):
         model = Profile
 
 _profile = ProfileSchema()
+_profiles = ProfileSchema(many=True)

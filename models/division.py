@@ -21,4 +21,5 @@ class DivisionSchema(Schema):
         fields = ('division')
         model = Division
 
+_division = DivisionSchema()
 _divisions = DivisionSchema(many=True)

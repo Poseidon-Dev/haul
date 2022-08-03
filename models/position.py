@@ -22,5 +22,6 @@ class PositionSchema(Schema):
     class meta:
         fields = ('position')
         model = Position
-
+        
+_position = PositionSchema()
 _positions = PositionSchema(many=True)
