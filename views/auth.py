@@ -1,32 +1,18 @@
-import requests, os, json
-from oauthlib.oauth2 import WebApplicationClient
+import requests, json
 
 from flask import redirect, request, url_for
+from flask_login import login_user, logout_user
 
-from flask_login import (
-    LoginManager,
-    login_user,
-    logout_user, 
-)
-
-from models import User
+from models import User, Profile
 from database import db
 import config
 
-# Configuration
-GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
-GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)
-GOOGLE_DISCOVERY_URL = (
-    "https://accounts.google.com/.well-known/openid-configuration"
-)
-
 # OAuth 2 client setup
-client = WebApplicationClient(GOOGLE_CLIENT_ID)
-
-login_manager = LoginManager()
+client = config.CLIENT
+login_manager = config.LOGIN_MANAGER
 
 def get_google_provider_cfg():
-    return requests.get(GOOGLE_DISCOVERY_URL).json()
+    return requests.get(config.GOOGLE_DISCOVERY_URL).json()
 
 # Flask-Login helper to retrieve a user from our db
 @login_manager.user_loader
@@ -67,7 +53,7 @@ def callback():
         token_url,
         headers=headers,
         data=body,
-        auth=(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET),
+        auth=(config.GOOGLE_CLIENT_ID, config.GOOGLE_CLIENT_SECRET),
     )
 
     # Parse the tokens
@@ -88,12 +74,14 @@ def callback():
     else:
         return "User email not available or not verified by Google.", 400
 
-    q = db.query(User)
     try:
-        u = q.filter(User.id==_id).one()
+        user_query = db.query(User)
+        u = user_query.filter(User.id==_id).one()
     except:
         u = User(_id, first_name, last_name, email, picture, domain, is_active)
         db.add(u)
+        p = Profile(user_id=u.id)
+        db.add(p)
         db.commit()
 
     login_user(u)
