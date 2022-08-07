@@ -1,10 +1,10 @@
 from flask import Flask
-import views
-from views.auth import login_manager
-from database import init_db
-import config
+import core.views as views
+from core.views.auth import login_manager
+from core.settings.database import init_db
+import core.settings.config as config
+from core.views.index import EquipmentListResource
 from flask_restful import Api
-from views.index import EquipmentListResource
 
 app = Flask(__name__)
 app.secret_key = config.SECRET_KEY

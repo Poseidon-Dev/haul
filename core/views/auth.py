@@ -3,9 +3,9 @@ import requests, json
 from flask import redirect, request, url_for
 from flask_login import login_user, logout_user
 
-from models import User, Profile
-from database import db
-import config
+from core.models import User, Profile
+from core.settings.database import db
+import core.settings.config as config
 
 # OAuth 2 client setup
 client = config.CLIENT

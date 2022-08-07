@@ -1,8 +1,9 @@
 from sqlalchemy import Column, String, Integer, Boolean
 from marshmallow import Schema
-from database import Base
-from models.base import BaseModel
-from models.division import Division
+from core.models.account import User
+from core.settings.database import Base
+from core.models.base import BaseModel
+from core.models.division import Division
 
 class Equipment(Base, BaseModel):
 
@@ -62,5 +63,44 @@ class EquipmentSchema(Schema):
         fields = ('equipment_id', 'description', 'division', 'division_id')
         model = Equipment
 
-_eqiup = EquipmentSchema()
+_equip = EquipmentSchema()
 _equips = EquipmentSchema(many=True)
+
+class EquipmentQueue(Base, BaseModel):
+
+    __tablename__ = 'equipment_queue'
+
+    equipment_id = Column(String(10))
+    user_id = Column(String(36), unique=True)
+    from_division = Column(Integer())
+    to_division = Column(Integer())
+    issue_date = Column(String(10))
+    accepted_date = Column(String(10))
+    completed_date = Column(String(10))
+    status = Column(Integer())
+
+    def __init__(self, equipment_id, user_id, from_division, to_division, issue_date, status=1, accepted_date=None, completed_date=None):
+        self.equipment_id = equipment_id
+        self.user_id = user_id
+        self.from_division = from_division
+        self.to_division = to_division
+        self.issue_date = issue_date
+        self.accepted_date = accepted_date
+        self.completed_date = completed_date
+        self.status = status
+
+    @property
+    def equipment(self):
+        return self.get_related_obj(Equipment, Equipment.equipment_id, self.equipment_id)
+
+    @property
+    def user(self):
+        return self.get_related_obj(User, User.id, self.user_id)
+
+class EquipmentQueueSchema(Schema):
+    class Meta:
+        fields = ('equipment_id', 'from_division', 'to_division', 'issue_date', 'accepted_date', 'completed_date')
+        model = EquipmentQueue
+
+_equip_queue = EquipmentQueueSchema()
+_equip_queues = EquipmentQueueSchema(many=True)

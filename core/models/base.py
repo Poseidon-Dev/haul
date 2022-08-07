@@ -1,7 +1,7 @@
 from sqlalchemy import Column, String
 from sqlalchemy.exc import NoResultFound
 from uuid import uuid4
-from database import db
+from core.settings.database import db
 
 class BaseModel:
 

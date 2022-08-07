@@ -1,7 +1,7 @@
 from sqlalchemy import Column, String, Integer, Boolean
 from marshmallow import Schema
-from database import Base
-import config
+from core.settings.database import Base
+import core.settings.config as config
 
 class Division(Base):
     __tablename__ = 'division'

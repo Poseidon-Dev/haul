@@ -4,6 +4,8 @@ from flask_login import (
 )
 from oauthlib.oauth2 import WebApplicationClient
 
+ENVIRONMENT = os.environ.get('ENVIRONMENT') or 'development'
+
 SECRET_KEY = os.environ.get("SECRET_KEY") or os.urandom(24)
 
 LOGIN_REDIRECT='index'
