@@ -4,6 +4,7 @@ from core.views.auth import login_manager
 from core.settings.database import init_db
 import core.settings.config as config
 from core.views.index import EquipmentListResource
+from core.views.equipment import EquipmentQueueApi
 from flask_restful import Api
 
 app = Flask(__name__)
@@ -20,6 +21,7 @@ app.add_url_rule('/logout', view_func=views.logout)
 
 
 Api(app).add_resource(EquipmentListResource, '/equip')
+Api(app).add_resource(EquipmentQueueApi, '/queue')
 
 
 if __name__ == "__main__":
