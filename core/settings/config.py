@@ -4,6 +4,9 @@ from flask_login import (
 )
 from oauthlib.oauth2 import WebApplicationClient
 
+BASE_DIR = os.environ.get('DB_STRING') or os.path.dirname(os.path.dirname(__file__))
+DB_NAME = os.environ.get('DB_NAME')
+
 ENVIRONMENT = os.environ.get('ENVIRONMENT') or 'development'
 
 SECRET_KEY = os.environ.get("SECRET_KEY") or os.urandom(24)

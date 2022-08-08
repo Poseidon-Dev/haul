@@ -7,7 +7,7 @@ from flask_restful import Api, Resource
 from core.settings.database import db
 from core.models import Equipment, Profile, User, EquipmentQueue
 from core.models import _equips, _profile, _user, _equip_queues
-from core.views.utils import CurrentUser
+from core.api.utils import CurrentUser
 
 def index():
     if current_user.is_authenticated:

@@ -70,8 +70,8 @@ class EquipmentQueue(Base, BaseModel):
 
     __tablename__ = 'equipment_queue'
 
-    equipment_id = Column(String(10))
-    user_id = Column(String(36), unique=True)
+    equipment_id = Column(String(10), unique=False) #TODO: Should be True in Production
+    user_id = Column(String(36), unique=False)
     from_division = Column(Integer())
     to_division = Column(Integer())
     issue_date = Column(String(10))
@@ -80,6 +80,7 @@ class EquipmentQueue(Base, BaseModel):
     status = Column(Integer())
 
     def __init__(self, equipment_id, user_id, from_division, to_division, issue_date, status=1, accepted_date=None, completed_date=None):
+        self.uuid = self._uuid
         self.equipment_id = equipment_id
         self.user_id = user_id
         self.from_division = from_division

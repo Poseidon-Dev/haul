@@ -5,10 +5,21 @@ from sqlalchemy.ext.declarative import declarative_base
 
 import core.settings.config as config
 
-if config.ENVIRONMENT == 'development':
-    os.remove(os.path.abspath('sqlite.db'))
 
-engine = create_engine(f'sqlite:////dev/00 - Projects/00-Apps/haul/sqlite.db')
+
+if config.ENVIRONMENT == 'development':
+    try:
+        db_path = os.path.abspath(f'{config.BASE_DIR}/data/{config.DB_NAME}')
+        os.remove('C:/dev/haul/backend/data/sqlite.db')
+    except Exception as e:
+        print(f'{config.BASE_DIR}/{config.DB_NAME}')
+
+try:
+    engine = create_engine(f'sqlite:////dev/haul/backend/data/sqlite.db')
+except Exception as e:
+    print(e)
+
+
 db = scoped_session(sessionmaker(autocommit=False,autoflush=False,bind=engine))
 
 Base = declarative_base()
