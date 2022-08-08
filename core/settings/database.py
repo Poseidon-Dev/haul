@@ -1,6 +1,8 @@
 import os
 from sqlalchemy import create_engine
+import sqlalchemy
 from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.declarative import declarative_base
 
 import core.settings.config as config
@@ -9,13 +11,14 @@ import core.settings.config as config
 
 if config.ENVIRONMENT == 'development':
     try:
-        db_path = os.path.abspath(f'{config.BASE_DIR}/data/{config.DB_NAME}')
-        os.remove('C:/dev/haul/backend/data/sqlite.db')
+        print(f'{config.DB_PATH}{config.DB_NAME}')
+        os.remove(f'{config.BASE_DIR}/data/{config.DB_NAME}')
     except Exception as e:
-        print(f'{config.BASE_DIR}/{config.DB_NAME}')
+        print(e)
+        print('Building DB')
 
 try:
-    engine = create_engine(f'sqlite:////dev/haul/backend/data/sqlite.db')
+    engine = create_engine(f'sqlite:////{config.DB_PATH}{config.DB_NAME}')
 except Exception as e:
     print(e)
 
@@ -34,15 +37,21 @@ def init_db():
 def create_dummy_data():
     from core.models.division import Division
     from core.models.position import Position
-    for _id, div in config.DIVISIONS.items():
-            d = Division(_id)
-            db.add(d)
-            db.commit()
+    try:
+        for _id, div in config.DIVISIONS.items():
+                d = Division(_id)
+                db.add(d)
+                db.commit()
+    except IntegrityError:
+        db.rollback()
+    try:
+        for _id, pos in config.POSITIONS.items():
+                p = Position(_id)
+                db.add(p)
+                db.commit()
+    except IntegrityError:
+        db.rollback()
 
-    for _id, pos in config.POSITIONS.items():
-            p = Position(_id)
-            db.add(p)
-            db.commit()
     def create_users():
         from core.models.account import User
         users = [
@@ -57,7 +66,6 @@ def create_dummy_data():
             }
         ]
         for user in users:
-            print(user)
             u = User(
                 id=user['_id'],
                 first_name=user['first_name'],
@@ -150,8 +158,3 @@ def create_dummy_data():
             db.add(e)
         db.commit()
     create_equipment()
-
-    # def create_equipement_queue():
-    #     pass
-    # create_equipement_queue()
-

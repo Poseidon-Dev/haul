@@ -18,7 +18,7 @@ app.add_url_rule('/login', view_func=api.login)
 app.add_url_rule('/login/callback', view_func=api.callback)
 app.add_url_rule('/logout', view_func=api.logout)
 
-
+_api = Api(app)
 # Api(app).add_resource(EquipmentListResource, '/equip')
 Api(app).add_resource(EquipmentQueueApi, '/queue')
 Api(app).add_resource(EquipmentApi, '/equip')

@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from flask import request, abort
+from flask import request, abort, Response
 from core.models import EquipmentQueue, _equip_queues, _equip_queue
 from core.models import Equipment, _equips, _equip
 from core.settings.database import db
@@ -15,7 +15,7 @@ class EquipmentQueueApi(Resource):
                 return 'Bad Request', 400
         e = Equipment.query.filter(Equipment.equipment_id==post['equipment_id']).first()
         if not e:
-            return abort(400, f'Equipment {post["equipment_id"]} is not available for queue')
+            return Response(f'Equipment {post["equipment_id"]} is not available for queue', 400)
 
         eq = EquipmentQueue(
             e.equipment_id,

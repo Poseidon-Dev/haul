@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, Integer, Boolean
 from marshmallow import Schema
-from core.settings.database import Base, db
+from core.settings.database import Base
 from core.models.base import BaseModel
 from core.models.division import Division
 from core.models.position import Position
