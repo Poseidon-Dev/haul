@@ -12,6 +12,7 @@ requests = "*"
 pyopenssl = "*"
 flask-sqlalchemy = "*"
 flask-marshmallow = "*"
+flask-cors = "*"
 
 [dev-packages]
 

@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS, cross_origin
 import core.api as api
 from core.api.auth import login_manager
 from core.settings.database import init_db
@@ -11,6 +12,9 @@ app.secret_key = config.SECRET_KEY
 
 init_db()
 login_manager.init_app(app)
+
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 app.add_url_rule('/', view_func=api.index)
 app.add_url_rule('/test', view_func=api.db_test)
@@ -26,4 +30,4 @@ Api(app).add_resource(EquipmentApi, '/equip')
 
 if __name__ == "__main__":
     # app.run(ssl_context="adhoc", debug=True)
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')

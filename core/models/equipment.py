@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, Boolean
+from sqlalchemy import Column, String, Integer, Boolean, null
 from marshmallow import Schema
 from core.models.account import User
 from core.settings.database import Base
@@ -29,12 +29,12 @@ class Equipment(Base, BaseModel):
                 description, 
                 serial,
                 model,
-                model_year,
-                status_code,
-                department,
-                item_class,
-                job_number,
-                warehouse,
+                model_year=None,
+                status_code=None,
+                department=None,
+                item_class=None,
+                job_number=None,
+                warehouse=None,
                 description2=None, 
                 description3=None, 
                 division_id=99):
@@ -60,7 +60,7 @@ class Equipment(Base, BaseModel):
 
 class EquipmentSchema(Schema):
     class Meta:
-        fields = ('equipment_id', 'description', 'division', 'division_id')
+        fields = ('equipment_id', 'description', 'division', 'division_id', 'serial', 'model', 'model_year', 'status_code', 'description2', 'item_class')
         model = Equipment
 
 _equip = EquipmentSchema()

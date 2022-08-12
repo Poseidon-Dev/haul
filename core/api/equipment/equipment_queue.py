@@ -1,4 +1,4 @@
-from flask_restful import Resource
+from flask_restful import Resource, current_app
 from flask import request, abort, Response
 from core.models import EquipmentQueue, _equip_queues, _equip_queue
 from core.models import Equipment, _equips, _equip

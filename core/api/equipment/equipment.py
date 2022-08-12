@@ -1,4 +1,5 @@
 from flask_restful import Resource
+from flask import jsonify
 from core.models import Equipment, _equips
 from core.settings.database import db
 
@@ -12,6 +13,5 @@ class EquipmentApi(Resource):
 
     def get(self):
         e = Equipment.query.all()
-        return {
-            'equipment': _equips.dump(e)
-        }
+        return jsonify(_equips.dump(e))
+        
